@@ -2,8 +2,7 @@ FROM ghcr.io/realbestia1/easyproxy:latest
 
 ENV PORT=7860
 ENV ENABLE_WARP=false
+ENV FLARESOLVERR_URL=http://127.0.0.1:8191
 EXPOSE 7860
 
-RUN python3 -c "from config_store import set; set('extractor_proxies', {'vixsrc': {'file': 'https://proxies.realbestia.com/proxies.txt'}}); print('Config populated')"
-
-CMD /bin/bash /app/entrypoint.sh
+CMD python3 -m flask --app flaresolverr/app run --host=0.0.0.0 --port=8191 >/tmp/flaresolverr.log 2>&1 & sleep 5 && /bin/bash /app/entrypoint.sh
